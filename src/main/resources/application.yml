@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: service-users
+  cloud:
+      config:
+        enabled: false
+  data:
+    mongodb:
+      uri:  "${MONGODB_URL:mongodb://127.0.0.1:27017/curri}"
+
+server:
+    port: ${SERVER_PORT:8501}
+
+

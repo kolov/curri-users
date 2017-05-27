@@ -1,0 +1,9 @@
+{
+  "cookieValue": "abcde",
+  "acceptsCookies": false,
+  "identity": {
+    "provider": "FACEBOOK",
+    "firstName": "John",
+    "lastName": "Doe"
+  }
+}

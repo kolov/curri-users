@@ -1,0 +1,14 @@
+secrets
+target/
+.settings/
+.springBeans
+.classpath
+.project
+bin/
+.cache
+.gradle
+.idea
+build/
+*.iml
+*.iws
+*.ipr

@@ -1,0 +1,119 @@
+apply plugin: 'docker'
+
+apply plugin: 'scala'
+apply plugin: 'org.springframework.boot'
+
+// Stick to Camden.RELEAS - https://spring.io/blog/2016/09/26/spring-cloud-camden-release-and-brixton-sr6-are-available
+
+
+dependencies {
+
+
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+
+    compile("org.hibernate:hibernate-validator")
+    compile("org.scala-lang:scala-library:2.11.7")
+    compile("com.fasterxml.jackson.module:jackson-module-scala_2.11:2.8.4")
+
+    testCompile("org.scalatest:scalatest:1.3")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("junit:junit")
+    testCompile("org.mockito:mockito-all:1.10.19")
+}
+
+
+buildscript {
+
+    ext {
+        springBootVersion = '1.4.3.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+    }
+
+}
+
+group = 'com.akolov.curi'
+
+allprojects {
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-config:1.2.2.RELEASE'
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR4"
+        }
+    }
+
+    task wrapper(type: Wrapper) {
+        gradleVersion = '2.9'
+    }
+
+    apply plugin: 'idea'
+
+    //group of docker images. Don't include repository here, tag/push later
+    group = 'kolov'
+    version = '0.1-SNAPSHOT'
+
+    project.ext {
+        dockerRepository = 'eu.gcr.io'
+    }
+}
+
+//def tagTask(applicationName, version) {
+//
+//    def group = "kolov"
+//
+//    def result = []
+//
+//    def existingTag = "$group/$applicationName:$version"
+//    def toCreateTag = "$group/$applicationName:latest"
+//
+//
+//    def task1 = tasks.create("tag${applicationName}Image", Exec) {
+//        println("Creating tag $toCreateTag from $existingTag")
+//        commandLine 'docker', 'tag', "$existingTag", "$toCreateTag"
+//    }
+//    result.add(task1)
+//
+//
+//     result.add(task2)
+//
+//    return result
+//}
+
+
+task buildDocker(type: Docker) {
+    push = false
+    applicationName = 'curriculi-service-users'
+    dockerfile = file('src/main/docker/Dockerfile')
+
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+
+
+}
