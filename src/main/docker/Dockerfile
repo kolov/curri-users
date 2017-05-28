@@ -1,6 +1,6 @@
 FROM kolov/java8
 VOLUME /tmp
-ADD *.jar
+ADD *.jar /tmp
 RUN sh -c 'touch /app.jar'
 ENV JAVA_OPTS=""
 ENV SERVER_PORT=9000
