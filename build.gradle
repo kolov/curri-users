@@ -107,6 +107,7 @@ task buildDocker(type: Docker) {
     push = false
     applicationName = 'curriculi-service-users'
     dockerfile = file('src/main/docker/Dockerfile')
+    version="latest"
 
     doFirst {
         copy {
