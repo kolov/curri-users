@@ -24,9 +24,10 @@ deployment:
       - sudo /opt/google-cloud-sdk/bin/gcloud config set container/cluster $CLUSTER_NAME
       - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
       - sudo /opt/google-cloud-sdk/bin/gcloud container clusters get-credentials $CLUSTER_NAME
-      - sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
-      - sudo chown -R $USER /home/ubuntu/.config
-      - sudo /opt/google-cloud-sdk/bin/gcloud --verbosity=debug docker -- push eu.gcr.io/${PROJECT_NAME}/${APP_NAME}:$CIRCLE_SHA1
+      - docker info
+      - docker build -t eu.gcr.io/${PROJECT_NAME}/${APP_NAME}:$CIRCLE_SHA1  .
+      - docker tag eu.gcr.io/${PROJECT_NAME}/${APP_NAME}:$CIRCLE_SHA1 eu.gcr.io/${PROJECT_NAME}/${APP_NAME}:latest
+      - sudo /opt/google-cloud-sdk/bin/gcloud --verbosity=debug docker -- push eu.gcr.io/${PROJECT_NAME}/${APP_NAME}
       - sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
       - sudo chown -R $USER /home/ubuntu/.config
       - kubectl patch deployment ${APP_NAME} -p '{"spec":{"template":{"spec":{"containers":[{"name":"'${APP_NAME}'", "image":"eu.gcr.io/'${PROJECT_NAME}/${APP_NAME}:${CIRCLE_SHA1}'"}]}}}}'
