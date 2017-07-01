@@ -1,120 +1,41 @@
-apply plugin: 'docker'
+buildscript {
+	ext {
+		kotlinVersion = '1.1.3'
+		springBootVersion = '1.5.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+	}
+}
 
-apply plugin: 'scala'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-// Stick to Camden.RELEAS - https://spring.io/blog/2016/09/26/spring-cloud-camden-release-and-brixton-sr6-are-available
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+compileKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+
+repositories {
+	mavenCentral()
+}
 
 
 dependencies {
-
-
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-
-    compile("org.hibernate:hibernate-validator")
-    compile("org.scala-lang:scala-library:2.11.7")
-    compile("com.fasterxml.jackson.module:jackson-module-scala_2.11:2.8.4")
-
-    testCompile("org.scalatest:scalatest:1.3")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("junit:junit")
-    testCompile("org.mockito:mockito-all:1.10.19")
-}
-
-
-buildscript {
-
-    ext {
-        springBootVersion = '1.4.3.RELEASE'
-    }
-
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
-    }
-
-}
-
-group = 'com.akolov.curi'
-
-allprojects {
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    apply plugin: "io.spring.dependency-management"
-
-    dependencyManagement {
-        imports {
-            mavenBom 'org.springframework.cloud:spring-cloud-config:1.2.2.RELEASE'
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR4"
-        }
-    }
-
-    task wrapper(type: Wrapper) {
-        gradleVersion = '2.9'
-    }
-
-    apply plugin: 'idea'
-
-    //group of docker images. Don't include repository here, tag/push later
-    group = 'kolov'
-    version = '0.1-SNAPSHOT'
-
-    project.ext {
-        dockerRepository = 'eu.gcr.io'
-    }
-}
-
-//def tagTask(applicationName, version) {
-//
-//    def group = "kolov"
-//
-//    def result = []
-//
-//    def existingTag = "$group/$applicationName:$version"
-//    def toCreateTag = "$group/$applicationName:latest"
-//
-//
-//    def task1 = tasks.create("tag${applicationName}Image", Exec) {
-//        println("Creating tag $toCreateTag from $existingTag")
-//        commandLine 'docker', 'tag', "$existingTag", "$toCreateTag"
-//    }
-//    result.add(task1)
-//
-//
-//     result.add(task2)
-//
-//    return result
-//}
-
-
-task buildDocker(type: Docker) {
-    push = false
-    applicationName = 'curriculi-service-users'
-    dockerfile = file('src/main/docker/Dockerfile')
-    version="latest"
-
-    doFirst {
-        copy {
-            from jar
-            into stageDir
-        }
-    }
-
-
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	compile('org.springframework.boot:spring-boot-starter-data-rest')
+	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
+	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
