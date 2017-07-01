@@ -11,18 +11,18 @@ import java.util.*
 class NotFoundException : Exception()
 
 @RestController
-@RequestMapping("/user")
 class UsersController(val userRepository: UserRepository,
                       val identityRepository: IdentityRepository) {
 
 
     @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/{id}")
     @ResponseBody
+    @Secure(roles = "internal")
     open fun user(@PathVariable("id") id: String): User {
         return userRepository.findOne(id) ?: throw NotFoundException()
     }
 
-    @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/details/{id}")
+    @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/user/details/{id}")
     @ResponseBody
     open fun details(@PathVariable("id") id: String): User {
         val user = userRepository.findOne(id) ?: throw NotFoundException()
@@ -37,15 +37,17 @@ class UsersController(val userRepository: UserRepository,
 
     }
 
-    @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/create")
+    @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/user/create")
     @ResponseBody
+    @Secure(roles = "internal")
     open fun create(): User {
         val user = User(UUID.randomUUID().toString())
         return userRepository.save(user)
     }
 
-    @RequestMapping(method = arrayOf(RequestMethod.PUT), value = "/{currentUserId}/identity")
+    @RequestMapping(method = arrayOf(RequestMethod.PUT), value = "/user/{currentUserId}/identity")
     @ResponseBody
+    @Secure(roles = "internal")
     open fun register(@PathVariable currentUserId: String, @RequestBody identity: Identity): User {
         val user = findUnregisterdUser(currentUserId)
         identityRepository.save(identity.copy(userId = user.id))
@@ -64,15 +66,10 @@ class UsersController(val userRepository: UserRepository,
         return user
     }
 
-}
 
-@RestController
-@RequestMapping("/identity")
-class IdentityController(val userRepository: UserRepository,
-                         val identityRepository: IdentityRepository) {
-
-    @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/")
+    @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/identity")
     @ResponseBody
+    @Secure(roles = "internal")
     open fun find(sub: String): Identity {
         return identityRepository.findOne(sub) ?: throw NotFoundException()
     }
