@@ -1,29 +1,36 @@
 package com.akolov.curriusers
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.repository.MongoRepository
 
-class Identity(
+@Document
+data class Identity(
 
         @Id
-        @JsonIgnore
-        var id: String? = null,
+        var cap: String? = null,
 
+        var userId: String? = null,
+        var givenName: String? = null,
+        var familyName: String? = null,
 
-        var xx: String? = null
-
+        var email: String? = null,
+        var picture: String? = null,
+        var others: Map<String, String> = HashMap()
 )
 
+@Document
 data class User(
         @Id
-        var id: String? = null
+        var id: String? = null,
+        var identity: Identity? = null
 
 )
 
 interface IdentityRepository : MongoRepository<Identity, String> {
 
 }
+
 interface UserRepository : MongoRepository<User, String> {
 
 }
