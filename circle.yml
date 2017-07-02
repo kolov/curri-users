@@ -12,8 +12,6 @@ dependencies:
 #  pre:
   override:
     - ./gradlew clean build
-  cache_directories:
-    - ~/.gradle
 
 deployment:
   prod:
