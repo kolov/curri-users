@@ -3,5 +3,5 @@ spring:
     default-property-inclusion: non_null
   data:
     mongodb:
-      host: ${spring.data.mongodb.host:localhost}
-      port: ${spring.data.mongodb.host:27017}
+      host: ${MONGO_USERS_SERVICE_HOST:localhost}
+      port: ${MONGO_USERS_SERVICE_PORT:27017}
