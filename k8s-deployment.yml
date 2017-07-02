@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: curri-users
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: curri-users
+    spec:
+      containers:
+      - name: curri-users
+        image: eu.gcr.io/iconic-setup-91510/curri-users:%VERSION%
+        ports:
+        - containerPort: 9000
+ 
