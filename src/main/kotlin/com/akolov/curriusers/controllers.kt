@@ -15,7 +15,7 @@ class UsersController(val userRepository: UserRepository,
                       val identityRepository: IdentityRepository) {
 
 
-    @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/{id}")
+    @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/user//{id}")
     @ResponseBody
     @Secure(roles = "internal")
     open fun user(@PathVariable("id") id: String): User {
@@ -67,10 +67,10 @@ class UsersController(val userRepository: UserRepository,
     }
 
 
-    @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/identity")
+    @RequestMapping(method = arrayOf(RequestMethod.GET), value = "/identity/{sub}")
     @ResponseBody
     @Secure(roles = "internal")
-    open fun find(sub: String): Identity {
+    open fun find(@PathVariable("sub") sub: String): Identity {
         return identityRepository.findOne(sub) ?: throw NotFoundException()
     }
 
