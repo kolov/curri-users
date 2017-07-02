@@ -1,3 +1,7 @@
-# curriculi
+# Users service
 
-A Scala Spring Boot application, - an experiment, possibly not the best technology combination.
+Service holding user ids and identities of logged users
+
+## Technology
+
+Kotlin, spring-boot, spring-data, mongodb
