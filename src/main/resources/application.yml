@@ -1,0 +1,7 @@
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      host: ${spring.data.mongodb.host:localhost}
+      port: ${spring.data.mongodb.host:27017}
