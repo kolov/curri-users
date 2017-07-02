@@ -39,3 +39,10 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+task(copyDockerfile, type: Copy) {
+	from(file('Dockerfile'))
+	into(buildDir.absolutePath + '/libs')
+}
+
+build.dependsOn copyDockerfile

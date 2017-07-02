@@ -4,6 +4,7 @@ machine:
   environment:
     PROJECT_NAME: iconic-setup-91510
     CLUSTER_NAME: cluster-1
+    BUILD_TARGET_DIR: build/libs
     CLOUDSDK_COMPUTE_ZONE: europe-west1-b
     APP_NAME: curriculi-service-users 
 
