@@ -14,8 +14,3 @@ spec:
         image: eu.gcr.io/iconic-setup-91510/curri-service-users:%VERSION%
         ports:
         - containerPort: 9000
-        env:
-        - name: SPRING_DATA_MONGODB_HOST
-          value: mongo-users
-        - name: SPRING_DATA_MONGODB_PORT
-          value: 27017
