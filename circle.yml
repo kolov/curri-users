@@ -10,7 +10,7 @@ machine:
 dependencies:
 #  pre:
   override:
-    - ./gradlew clean build buildDocker
+    - ./gradlew clean build
 
 deployment:
   prod:
